@@ -1,0 +1,45 @@
+version: '3'
+services:
+  desconto-simulacao:
+    container_name: desconto-simulacao
+    hostname: desconto-simulacao
+    image: joaoroberto/desconto-simulacao:latest
+    build: ./
+    working_dir: /desconto-simulacao
+    deploy:
+      replicas: 1
+    restart: always
+    ports:
+      - target: 8080
+        published: 8080
+        protocol: tcp
+        mode: host
+    depends_on:
+      - redis
+    command: mvn spring-boot:run -Dspring-boot.run.profiles=docker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=docker"
+    networks:
+      - app-net
+
+  redis:
+    image: redis:latest
+    container_name: container-redis
+    hostname: container-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app-net
+
+  redis-commander:
+    image: rediscommander/redis-commander
+    ports:
+      - "8081:8081"
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    networks:
+      - app-net
+
+networks:
+  app-net:
+    driver: bridge

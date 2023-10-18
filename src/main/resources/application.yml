@@ -1,0 +1,10 @@
+spring:
+  redis:
+    host: helpc-cluster-redis.dh3efv.ng.0001.use1.cache.amazonaws.com
+    port: 6379
+  http:
+    multipart:
+      max-request-size: 50MB
+      max-file-size: 50MB
+  codec:
+    max-in-memory-size: 52428800
